@@ -1,0 +1,5 @@
+# TODO
+
+- hoisting
+- narrowing
+- satisfies
