@@ -22,7 +22,14 @@ Node20 has newer libraries and global functions over Node18.
 
 ```sh
 cd ./01_quokka_node20_ts54
+
+nvm install
+
 nvm use
+
+npm install
+cp ./.env.template .env   
+
 code .
 ```
 
@@ -32,7 +39,7 @@ code .
 # run with ts-node
 npm run start
 
-npm run verbose
+npm run start:verbose
 
 npm run lint
 npm exec -- eslint --print-config .eslintrc

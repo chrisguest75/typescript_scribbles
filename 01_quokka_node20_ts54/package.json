@@ -14,7 +14,7 @@
     "dotenv-quokka-plugin": "^1.0.0"
   },
   "scripts": {
-    "verbose": "ts-node -vvv ./quokka_versions.ts",
+    "start:verbose": "ts-node -vvv ./quokka_versions.ts",
     "start": "ts-node ./quokka_versions.ts",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
