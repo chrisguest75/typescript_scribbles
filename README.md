@@ -22,3 +22,7 @@ pre-commit install --hook-type commit-msg --hook-type pre-push
 ## Resources
 
 - TypeScript is JavaScript with syntax for types. [here[(https://www.typescriptlang.org/)
+- https://github.com/type-challenges/type-challenges
+- https://github.com/millsp/ts-toolbelt
+- https://github.com/piotrwitek/utility-types
+- https://github.com/andnp/SimplyTyped

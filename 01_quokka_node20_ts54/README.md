@@ -4,19 +4,19 @@ Demonstrate using node v20 with Quokka in VSCode.
 
 NOTES:
 
-* How do I know what version of typescript quokka is using?
-  * Quokka prints out the version of quokka being used. You can `nvm use` before loading `code`.  
-* How do I print out in ts-node the version of typescript used to compile code?  `ts-node -vvv`
+-   How do I know what version of typescript quokka is using?
+    -   Quokka prints out the version of quokka being used. You can `nvm use` before loading `code`.
+-   How do I print out in ts-node the version of typescript used to compile code? `ts-node -vvv`
 
 TODO:
 
-* ts-node doesn't seem to respect the nvm version.  
+-   ts-node doesn't seem to respect the nvm version.
 
 ## Reason
 
-Node20 has newer libraries and global functions over Node18.  
+Node20 has newer libraries and global functions over Node18.
 
-* Node20 Synopsis [here](https://nodejs.org/docs/latest-v20.x/api/synopsis.html)  
+-   Node20 Synopsis [here](https://nodejs.org/docs/latest-v20.x/api/synopsis.html)
 
 ## Starting
 
@@ -28,7 +28,7 @@ nvm install
 nvm use
 
 npm install
-cp ./.env.template .env   
+cp ./.env.template .env
 
 code .
 ```
@@ -49,9 +49,9 @@ npm exec -- eslint --print-config .eslintrc
 
 ```sh
 npm install dotenv-quokka-plugin
-npm install -D ts-node typescript @types/node 
+npm install -D ts-node typescript @types/node
 
-nvm use 
+nvm use
 node --version > .nvmrc
 
 npm exec -- tsc --help
@@ -67,7 +67,7 @@ Add a basic linter
 
 ```sh
 npm install --save-dev eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin
-npm install eslint-plugin-prettier@latest eslint-config-prettier --save-dev 
+npm install eslint-plugin-prettier@latest eslint-config-prettier --save-dev
 
 # add an .eslintrc
 cat << EOF > ./.eslintignore
@@ -92,7 +92,7 @@ cat << EOF > ./.eslintrc
       "sourceType": "module"
   },
   "plugins": [
-      "@typescript-eslint", 
+      "@typescript-eslint",
       "prettier"
   ],
   "rules": {
@@ -129,7 +129,7 @@ Install prettier
 
 ```sh
 code --install-extension esbenp.prettier-vscode
-npm install --save-dev prettier 
+npm install --save-dev prettier
 
 cat << EOF  > ./.prettierrc
 {
@@ -145,8 +145,9 @@ EOF
 
 ## Resources
 
-* THE JAVASCRIPT PLAYGROUND IN YOUR EDITOR [here](https://quokkajs.com/)
-* jest-extended [here](https://jest-extended.jestcommunity.dev/docs/)
-* TypeScript Style Guide [here](https://mkosir.github.io/typescript-style-guide/)
-* https://www.npmjs.com/package/ts-node
-* https://typescript-eslint.io/getting-started
+-   THE JAVASCRIPT PLAYGROUND IN YOUR EDITOR [here](https://quokkajs.com/)
+-   jest-extended [here](https://jest-extended.jestcommunity.dev/docs/)
+-   TypeScript Style Guide [here](https://mkosir.github.io/typescript-style-guide/)
+-   https://www.npmjs.com/package/ts-node
+-   https://typescript-eslint.io/getting-started
+-   https://www.typescriptlang.org/tsconfig#strict
