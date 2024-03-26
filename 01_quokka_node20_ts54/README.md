@@ -33,6 +33,14 @@ cp ./.env.template .env
 code .
 ```
 
+## Transpile
+
+You might want to transpile to check outputs.  
+
+```sh
+npm exec tsc ./quokka_generic_add.ts
+```
+
 ## Run
 
 ```sh
