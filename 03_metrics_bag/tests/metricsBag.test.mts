@@ -128,4 +128,30 @@ describe('MetricsBag', () => {
     expect(value2Count).toBeDefined()
     expect(value2Count).toBe(12)
   })
+
+  it('returns a filtered object with names and values', () => {
+    // ARRANGE
+    const mb = new MetricsBag()
+
+    // ACT
+    const counter1 = new MetricCounter(10)
+    const counter2 = new MetricCounter(12)
+    mb.addMetric('myCounter1', counter1)
+    mb.addMetric('myCounter2', counter2)
+    const value1 = mb.getMetric('myCounter1')
+    const value2 = mb.getMetric('myCounter2')
+
+    const metrics = mb.getMetrics(['myCounter1'])
+
+    // ASSERT
+    expect(metrics).toBeDefined()
+    expect(metrics.size).toBe(1)
+
+    const value1Count = metrics.get('myCounter1')
+    expect(value1Count).toBeDefined()
+    expect(value1Count).toBe(10)
+
+    const value2Count = metrics.get('myCounter2')
+    expect(value2Count).toBeUndefined()
+  })
 })

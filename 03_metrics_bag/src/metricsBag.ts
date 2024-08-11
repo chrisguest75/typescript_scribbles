@@ -32,10 +32,20 @@ export class MetricsBag {
     return this.metrics.get(key)
   }
 
-  getMetrics(): Map<string, number> {
+  getMetrics(filter: Array<string> = []): Map<string, number> {
     // create a new object using string as name and MetricTypes as value
     const metrics: Map<string, number> = new Map<string, number>()
-    this.metrics.forEach((value, key) => {
+
+    const keys = filter.length === 0 ? Array.from(this.metrics.keys()) : filter
+    const filteredMetrics = new Map<string, MetricTypes>()
+    keys.forEach((key) => {
+      const metric = this.metrics.get(key)
+      if (metric) {
+        filteredMetrics.set(key, metric)
+      }
+    })
+
+    filteredMetrics.forEach((value, key) => {
       if (value instanceof MetricCounter) {
         metrics.set(key, value.getCount())
         return
