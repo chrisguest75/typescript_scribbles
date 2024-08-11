@@ -4,7 +4,6 @@ Demonstrates 03_metrics_bag
 
 TODO:
 
-- coverage?
 - performance
 - add labels to metrics bag and labels to individual metrics.
 
@@ -27,6 +26,7 @@ npm run tsc -- --version
 # run targets
 npm run start:dev
 npm run test
+npm run test:coverage
 npm run lint
 
 # docker build
