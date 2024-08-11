@@ -21,8 +21,8 @@ pre-commit install --hook-type commit-msg --hook-type pre-push
 
 ## Resources
 
-- TypeScript is JavaScript with syntax for types. [here[(https://www.typescriptlang.org/)
-- https://github.com/type-challenges/type-challenges
-- https://github.com/millsp/ts-toolbelt
-- https://github.com/piotrwitek/utility-types
-- https://github.com/andnp/SimplyTyped
+- TypeScript is JavaScript with syntax for types. [here](https://www.typescriptlang.org/)
+- Collection of TypeScript type challenges [here](https://github.com/type-challenges/type-challenges)
+- TypeScript's largest utility library [here](https://github.com/millsp/ts-toolbelt)
+- Collection of utility types, complementing TypeScript built-in mapped types and aliases (think "lodash" for static types). [here](https://github.com/piotrwitek/utility-types)
+- Yet another typing library. This differs by aiming to be less experimental than others, driven by industry use cases. [here](https://github.com/andnp/SimplyTyped)
