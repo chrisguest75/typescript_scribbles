@@ -34,14 +34,8 @@ export class MetricTimestamp {
     this.oneShot = oneShot
   }
 
-  mark() {
-    if (this.endTimestamp === -1 || !this.oneShot) {
-      this.endTimestamp = Date.now()
-    }
-  }
-
   getStartTimestamp(): number {
-    return this.endTimestamp
+    return this.startTimestamp
   }
 
   getEndTimestamp(): number {
@@ -49,6 +43,9 @@ export class MetricTimestamp {
   }
 
   getDelta(): number {
+    if (this.endTimestamp === -1 || !this.oneShot) {
+      this.endTimestamp = Date.now()
+    }
     return this.endTimestamp - this.startTimestamp
   }
 }

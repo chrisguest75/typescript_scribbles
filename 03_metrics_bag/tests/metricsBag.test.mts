@@ -1,6 +1,14 @@
-import { MetricsBag, MetricCounter } from '../src/metricsBag'
+import { validateHeaderName } from 'http'
+import { MetricsBag, MetricCounter, MetricTimestamp } from '../src/metricsBag'
 
 describe('MetricsBag', () => {
+  afterEach(() => {
+    //let testName = expect.getState().currentTestName
+    //console.log(`afterEach ${testName}`)
+    jest.clearAllMocks()
+    jest.resetAllMocks()
+  })
+
   it('a stored MetricCounter can be incremented', () => {
     // ARRANGE
     const mb = new MetricsBag()
@@ -60,6 +68,36 @@ describe('MetricsBag', () => {
     expect(() => {
       mb.addMetric('myCounter1', counter2)
     }).toThrow(Error)
+  })
+
+  it('can store different types of metrics', () => {
+    const mockTimestamp = 1605139200000 // equivalent to 2020-11-12T00:00:00.000Z
+    jest.spyOn(Date, 'now').mockImplementation(() => mockTimestamp)
+
+    // ARRANGE
+    const mb = new MetricsBag()
+
+    // ACT
+    const counter1 = new MetricCounter()
+    counter1.increment()
+    const ts1 = new MetricTimestamp(mockTimestamp - 0, false)
+    const ts2 = new MetricTimestamp(mockTimestamp - 1000, false)
+    mb.addMetric('myCounter1', counter1)
+    mb.addMetric('myTimestamp1', ts1)
+    mb.addMetric('myTimestamp2', ts2)
+    const value1 = mb.getMetric('myCounter1')
+    const value2 = mb.getMetric('myTimestamp1')
+    const value3 = mb.getMetric('myTimestamp2')
+
+    // ASSERT
+    expect(value1).toBeInstanceOf(MetricCounter)
+    expect((value1 as MetricCounter)?.getCount()).toBe(1)
+
+    expect(value2).toBeInstanceOf(MetricTimestamp)
+    expect((value2 as MetricTimestamp)?.getDelta()).toBe(0)
+
+    expect(value3).toBeInstanceOf(MetricTimestamp)
+    expect((value3 as MetricTimestamp)?.getDelta()).toBe(1000)
   })
 
   it('returns an object with names and values', () => {
