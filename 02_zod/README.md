@@ -5,7 +5,13 @@ Demonstrates Zod functionality.
 TODO:
 
 - Runtime and compile time.
-- versioned schemas
+- versioned schemas - https://www.jcore.io/articles/schema-versioning-with-zod
+- validate any object with zod
+
+## Demonstrates
+
+- Loading JSON files off disk and validating them against a Zod schema
+- Different Zod types
 
 ## How to run
 
@@ -71,3 +77,4 @@ The code should break on the breakpoint.
 
 - https://www.reddit.com/r/typescript/comments/10f8kah/is_using_zod_as_the_primary_source_of_truth_for/
 - https://transform.tools/json-to-zod
+- https://testdouble.com/insights/type-safety-at-runtime-with-zod

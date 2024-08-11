@@ -6,6 +6,7 @@ TODO:
 
 - performance
 - add labels to metrics bag and labels to individual metrics.
+- I don't like that I have to cast in the client and check types in the getMetrics.
 
 ## Supports
 
