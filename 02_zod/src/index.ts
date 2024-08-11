@@ -1,6 +1,7 @@
 import { logger } from './logger.js'
 import * as dotenv from 'dotenv'
 import minimist from 'minimist'
+import { LoadSimpleSchema } from './simpleSchema.js'
 
 /*
 Entrypoint
@@ -15,8 +16,17 @@ export async function main(args: minimist.ParsedArgs) {
   logger.info({ node_env: process.env.NODE_ENV })
   logger.info({ 'node.version': process.version })
 
-  if (args['throwError']) {
-    throw new Error("I'm an error")
+  const schema = args['schema']
+  switch (schema) {
+    case 'simple':
+      const jsonPath = args['jsonPath']
+      logger.info({ msg: 'Loading simple schema', jsonPath: jsonPath })
+      const config = LoadSimpleSchema(jsonPath)
+      logger.info({ msg: 'Simple schema loaded', config: config })
+      break
+    default:
+      logger.error({ msg: 'Invalid schema', schema })
+      process.exit(1)
   }
 }
 
@@ -46,9 +56,9 @@ process.on('unhandledRejection', async (reason, promise) => {
 dotenv.config()
 logger.info(`Pino:${logger.version}`)
 const args: minimist.ParsedArgs = minimist(process.argv.slice(2), {
-  string: ['ssmName'],
-  boolean: ['verbose', 'ssmRead', 'ssmWrite', 'throwError'],
-  default: { verbose: true, throwError: false, ssmRead: false, ssmWrite: false, ssmName: 'testssmdocument' },
+  string: ['jsonPath', 'schema'],
+  boolean: ['verbose'],
+  default: { verbose: true, jsonPath: './tests/testdata/valid_config.json', schema: 'simple' },
 })
 
 try {

@@ -5,6 +5,7 @@ Demonstrates Zod functionality.
 TODO:
 
 - Runtime and compile time.
+- versioned schemas
 
 ## How to run
 
@@ -26,6 +27,15 @@ npm run docker:run
 
 # run all tests
 just local-test-pipeline
+```
+
+## Examples
+
+```sh
+npm run start -- --jsonPath './tests/testdata/valid_config.json'
+npm run start -- --jsonPath './tests/testdata/invalid_config.json'
+
+npm run start -- --jsonPath './tests/testdata/valid_config.json' --schema simple
 ```
 
 ## Debugging
@@ -60,3 +70,4 @@ The code should break on the breakpoint.
 - validator.js - A library of string validators and sanitizers. [here](https://github.com/validatorjs/validator.js)
 
 - https://www.reddit.com/r/typescript/comments/10f8kah/is_using_zod_as_the_primary_source_of_truth_for/
+- https://transform.tools/json-to-zod
