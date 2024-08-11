@@ -1,0 +1,29 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "JEST 03_metrics_bag",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/03_metrics_bag/node_modules/.bin/jest",
+      "args": [],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/03_metrics_bag",
+      "internalConsoleOptions": "neverOpen",
+      "windows": {
+        "program": "${workspaceFolder}/03_metrics_bag/node_modules/jest/bin/jest"
+      }
+    },
+    {
+      "name": "INDEX 03_metrics_bag",
+      "type": "node",
+      "request": "launch",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/03_metrics_bag/src/index.ts",
+      "outFiles": ["${workspaceFolder}/**/*.js"]
+    }
+  ]
+}

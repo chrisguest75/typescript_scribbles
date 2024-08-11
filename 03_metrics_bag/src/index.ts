@@ -1,23 +1,41 @@
 import { logger } from './logger.js'
 import * as dotenv from 'dotenv'
 import minimist from 'minimist'
+import { MetricsBag, MetricCounter, MetricTimestamp } from './metricsBag.js'
 
 /*
 Entrypoint
 */
 export async function main(args: minimist.ParsedArgs) {
-  logger.trace('TRACE - level message')
-  logger.debug('DEBUG - level message')
-  logger.info('INFO - level message')
-  logger.warn('WARN - level message')
-  logger.error('ERROR - level message')
-  logger.fatal('FATAL - level message')
-  logger.info({ node_env: process.env.NODE_ENV })
-  logger.info({ 'node.version': process.version })
+  const counter = new MetricCounter()
+  const timestamp = new MetricTimestamp(Date.now(), true)
+  const mb = new MetricsBag()
+  mb.addMetric('myCounter', counter)
+  mb.addMetric('myTimestamp', timestamp)
 
-  if (args['throwError']) {
+  logger.trace('TRACE - level message')
+  counter.increment()
+  logger.debug('DEBUG - level message')
+  counter.increment()
+  logger.info('INFO - level message')
+  counter.increment()
+  logger.warn('WARN - level message')
+  counter.increment()
+  logger.error('ERROR - level message')
+  counter.increment()
+  logger.fatal('FATAL - level message')
+  counter.increment()
+  logger.info({ node_env: process.env.NODE_ENV })
+  counter.increment()
+  logger.info({ 'node.version': process.version })
+  counter.increment()
+
+  timestamp.mark()
+
+  logger.info(JSON.stringify(mb.getMetrics()))
+  /*if (args['throwError']) {
     throw new Error("I'm an error")
-  }
+  }*/
 }
 
 process.on('exit', async () => {
