@@ -40,6 +40,7 @@ export async function main(args: minimist.ParsedArgs) {
 
   const metrics = mb.getMetrics()
   const metricsFromEntries = Object.fromEntries(metrics)
+  logger.info(metricsFromEntries)
   const metricsJson = JSON.stringify(metricsFromEntries)
   logger.info(metricsJson)
   /*if (args['throwError']) {
