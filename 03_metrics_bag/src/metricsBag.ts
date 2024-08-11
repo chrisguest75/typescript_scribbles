@@ -1,3 +1,12 @@
+/**
+ * MetricCounter class
+ * @class MetricCounter
+ * @constructor
+ * @param {number} initialCount - initial count value
+ * @method increment - increment the count
+ * @method getCount - get the count
+ * @returns {void}
+ */
 export class MetricCounter {
   private count: number
 
@@ -54,6 +63,9 @@ export class MetricsBag {
   }
 
   addMetric(key: string, value: MetricTypes): void {
+    if (this.metrics.has(key)) {
+      throw new Error('Duplicate metric name')
+    }
     this.metrics.set(key, value)
   }
 

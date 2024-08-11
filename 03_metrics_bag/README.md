@@ -5,9 +5,9 @@ Demonstrates 03_metrics_bag
 TODO:
 
 - coverage?
-- mock datetime.
 - performance
 - get metrics should have a pick method
+- add labels to metrics bag and labels to individual metrics.
 
 ## How to run
 
