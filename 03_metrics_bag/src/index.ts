@@ -1,7 +1,10 @@
 import { logger } from './logger.js'
 import * as dotenv from 'dotenv'
 import minimist from 'minimist'
-import { MetricsBag, MetricCounter, MetricTimestamp } from './metricsBag.js'
+import { MetricsBag } from './metricsBag.js'
+import { MetricCounter } from './metricCounter.js'
+import { MetricTimestamp } from './metricTimestamp.js'
+import { MetricValue } from './metricValue.js'
 
 async function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -11,38 +14,40 @@ async function sleep(ms: number) {
 Entrypoint
 */
 export async function main(args: minimist.ParsedArgs) {
-  const counter = new MetricCounter()
-  const timestamp = new MetricTimestamp(Date.now(), true)
+  const loopCounter = new MetricCounter(0)
+  const startTimestamp = new MetricTimestamp(Date.now(), true)
+  const lastTimestamp = new MetricTimestamp(Date.now(), false)
+  const lastSleep = new MetricValue(0)
   const mb = new MetricsBag()
-  mb.addMetric('myCounter', counter)
-  mb.addMetric('myTimestamp', timestamp)
+  mb.addMetric('loopCounter', loopCounter)
+  mb.addMetric('startTimestamp', startTimestamp)
+  mb.addMetric('lastTimestamp', lastTimestamp)
+  mb.addMetric('lastSleep', lastSleep)
 
   logger.trace('TRACE - level message')
-  counter.increment()
   logger.debug('DEBUG - level message')
-  counter.increment()
   logger.info('INFO - level message')
-  counter.increment()
   logger.warn('WARN - level message')
-  counter.increment()
   logger.error('ERROR - level message')
-  counter.increment()
   logger.fatal('FATAL - level message')
-  counter.increment()
   logger.info({ node_env: process.env.NODE_ENV })
-  counter.increment()
   logger.info({ 'node.version': process.version })
-  counter.increment()
 
-  await sleep(1000)
+  const time = parseInt(args.time)
+  startTimestamp.getDelta()
+  while (lastTimestamp.getDelta() < time) {
+    loopCounter.increment()
+    const sleepTime = Math.floor(Math.random() * 1000)
+    lastSleep.setValue(sleepTime)
+    await sleep(sleepTime)
 
-  timestamp.mark()
+    const metrics = mb.getMetrics()
+    const metricsFromEntries = Object.fromEntries(metrics)
+    logger.info(metricsFromEntries)
+    const metricsJson = JSON.stringify(metricsFromEntries)
+    logger.info(metricsJson)
+  }
 
-  const metrics = mb.getMetrics()
-  const metricsFromEntries = Object.fromEntries(metrics)
-  logger.info(metricsFromEntries)
-  const metricsJson = JSON.stringify(metricsFromEntries)
-  logger.info(metricsJson)
   /*if (args['throwError']) {
     throw new Error("I'm an error")
   }*/
@@ -74,9 +79,9 @@ process.on('unhandledRejection', async (reason, promise) => {
 dotenv.config()
 logger.info(`Pino:${logger.version}`)
 const args: minimist.ParsedArgs = minimist(process.argv.slice(2), {
-  string: ['ssmName'],
-  boolean: ['verbose', 'ssmRead', 'ssmWrite', 'throwError'],
-  default: { verbose: true, throwError: false, ssmRead: false, ssmWrite: false, ssmName: 'testssmdocument' },
+  string: ['time'],
+  boolean: ['verbose'],
+  default: { verbose: true, time: '10000' },
 })
 
 try {

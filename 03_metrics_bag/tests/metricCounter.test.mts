@@ -1,4 +1,4 @@
-import { MetricCounter } from '../src/metricsBag'
+import { MetricCounter } from '../src/metricCounter'
 
 describe('MetricCounter', () => {
   it('can have an initial value', () => {

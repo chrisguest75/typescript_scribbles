@@ -1,5 +1,7 @@
 import { validateHeaderName } from 'http'
-import { MetricsBag, MetricCounter, MetricTimestamp } from '../src/metricsBag'
+import { MetricsBag } from '../src/metricsBag'
+import { MetricCounter } from '../src/metricCounter'
+import { MetricTimestamp } from '../src/metricTimestamp'
 
 describe('MetricsBag', () => {
   afterEach(() => {

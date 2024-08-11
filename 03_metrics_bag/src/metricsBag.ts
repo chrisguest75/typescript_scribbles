@@ -1,56 +1,8 @@
-/**
- * MetricCounter class
- * @class MetricCounter
- * @constructor
- * @param {number} initialCount - initial count value
- * @method increment - increment the count
- * @method getCount - get the count
- * @returns {void}
- */
-export class MetricCounter {
-  private count: number
+import { MetricCounter } from './metricCounter'
+import { MetricTimestamp } from './metricTimestamp'
+import { MetricValue } from './metricValue'
 
-  constructor(initialCount = 0) {
-    this.count = initialCount
-  }
-
-  increment(): void {
-    this.count++
-  }
-
-  getCount(): number {
-    return this.count
-  }
-}
-
-export class MetricTimestamp {
-  private startTimestamp: number
-  private endTimestamp: number
-  private oneShot: boolean
-
-  constructor(startMark: number, oneShot: boolean) {
-    this.startTimestamp = startMark
-    this.endTimestamp = -1
-    this.oneShot = oneShot
-  }
-
-  getStartTimestamp(): number {
-    return this.startTimestamp
-  }
-
-  getEndTimestamp(): number {
-    return this.endTimestamp
-  }
-
-  getDelta(): number {
-    if (this.endTimestamp === -1 || !this.oneShot) {
-      this.endTimestamp = Date.now()
-    }
-    return this.endTimestamp - this.startTimestamp
-  }
-}
-
-type MetricTypes = MetricCounter | MetricTimestamp
+type MetricTypes = MetricCounter | MetricTimestamp | MetricValue
 
 export class MetricsBag {
   private metrics: Map<string, MetricTypes>
@@ -80,6 +32,10 @@ export class MetricsBag {
       }
       if (value instanceof MetricTimestamp) {
         metrics.set(key, value.getDelta())
+        return
+      }
+      if (value instanceof MetricValue) {
+        metrics.set(key, value.getValue())
         return
       }
     })

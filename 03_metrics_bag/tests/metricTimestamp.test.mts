@@ -1,4 +1,4 @@
-import { MetricTimestamp } from '../src/metricsBag'
+import { MetricTimestamp } from '../src/metricTimestamp'
 
 describe('MetricTimestamp', () => {
   afterEach(() => {

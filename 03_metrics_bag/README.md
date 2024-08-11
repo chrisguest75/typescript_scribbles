@@ -32,6 +32,12 @@ npm run docker:run
 just local-test-pipeline
 ```
 
+## Run an example
+
+```sh
+npm run start -- --time 20000
+```
+
 ## Debugging
 
 Ensure that the sourcemap output is enabled.
