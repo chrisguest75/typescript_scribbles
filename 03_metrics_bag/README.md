@@ -7,7 +7,13 @@ TODO:
 - coverage?
 - performance
 - add labels to metrics bag and labels to individual metrics.
-- A max and min value type
+
+## Supports
+
+- A timestamp that can be used for measuring deltas
+- A counter incrementing only
+- A value metric type with max and min value configuration to retain highest and lowest values.
+- A metric bag class that can also be configured using a factory.
 
 ## How to run
 

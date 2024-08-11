@@ -4,7 +4,7 @@ import minimist from 'minimist'
 import { MetricsBag } from './metricsBag.js'
 import { MetricCounter } from './metricCounter.js'
 import { MetricTimestamp } from './metricTimestamp.js'
-import { MetricValue } from './metricValue.js'
+import { MetricValue, MetricValueTypes } from './metricValue.js'
 
 async function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -14,15 +14,21 @@ async function sleep(ms: number) {
 Entrypoint
 */
 export async function main(args: minimist.ParsedArgs) {
-  const loopCounter = new MetricCounter(0)
-  const startTimestamp = new MetricTimestamp(Date.now(), true)
-  const lastTimestamp = new MetricTimestamp(Date.now(), false)
-  const lastSleep = new MetricValue(0)
-  const mb = new MetricsBag()
-  mb.addMetric('loopCounter', loopCounter)
-  mb.addMetric('startTimestamp', startTimestamp)
-  mb.addMetric('lastTimestamp', lastTimestamp)
-  mb.addMetric('lastSleep', lastSleep)
+  const mb = MetricsBag.create([
+    { name: 'loopCounter', metric: new MetricCounter(0) },
+    { name: 'startTimestamp', metric: new MetricTimestamp(Date.now(), true) },
+    { name: 'endTimestamp', metric: new MetricTimestamp(Date.now(), false) },
+    { name: 'lastSleep', metric: new MetricValue(0, MetricValueTypes.NORMAL) },
+    { name: 'minSleep', metric: new MetricValue(10000, MetricValueTypes.MIN) },
+    { name: 'maxSleep', metric: new MetricValue(0, MetricValueTypes.MAX) },
+  ])
+
+  const loopCounter: MetricCounter = mb.getMetric('loopCounter') as MetricCounter
+  const startTimestamp: MetricTimestamp = mb.getMetric('startTimestamp') as MetricTimestamp
+  const lastTimestamp: MetricTimestamp = mb.getMetric('endTimestamp') as MetricTimestamp
+  const lastSleep: MetricValue = mb.getMetric('lastSleep') as MetricValue
+  const minSleep: MetricValue = mb.getMetric('minSleep') as MetricValue
+  const maxSleep: MetricValue = mb.getMetric('maxSleep') as MetricValue
 
   logger.trace('TRACE - level message')
   logger.debug('DEBUG - level message')
@@ -39,6 +45,8 @@ export async function main(args: minimist.ParsedArgs) {
     loopCounter.increment()
     const sleepTime = Math.floor(Math.random() * 1000)
     lastSleep.setValue(sleepTime)
+    minSleep.setValue(sleepTime)
+    maxSleep.setValue(sleepTime)
     await sleep(sleepTime)
 
     const metrics = mb.getMetrics()
