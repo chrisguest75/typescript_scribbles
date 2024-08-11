@@ -3,6 +3,10 @@ import * as dotenv from 'dotenv'
 import minimist from 'minimist'
 import { MetricsBag, MetricCounter, MetricTimestamp } from './metricsBag.js'
 
+async function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 /*
 Entrypoint
 */
@@ -30,9 +34,14 @@ export async function main(args: minimist.ParsedArgs) {
   logger.info({ 'node.version': process.version })
   counter.increment()
 
+  await sleep(1000)
+
   timestamp.mark()
 
-  logger.info(JSON.stringify(mb.getMetrics()))
+  const metrics = mb.getMetrics()
+  const metricsFromEntries = Object.fromEntries(metrics)
+  const metricsJson = JSON.stringify(metricsFromEntries)
+  logger.info(metricsJson)
   /*if (args['throwError']) {
     throw new Error("I'm an error")
   }*/

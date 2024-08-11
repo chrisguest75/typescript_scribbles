@@ -1,8 +1,8 @@
 export class MetricCounter {
   private count: number
 
-  constructor() {
-    this.count = 0
+  constructor(initialCount = 0) {
+    this.count = initialCount
   }
 
   increment(): void {
@@ -26,7 +26,7 @@ export class MetricTimestamp {
   }
 
   mark() {
-    if (this.endTimestamp === -1 && !this.oneShot) {
+    if (this.endTimestamp === -1 || !this.oneShot) {
       this.endTimestamp = Date.now()
     }
   }
@@ -61,7 +61,20 @@ export class MetricsBag {
     return this.metrics.get(key)
   }
 
-  getMetrics(): Map<string, MetricTypes> {
-    return this.metrics
+  getMetrics(): Map<string, number> {
+    // create a new object using string as name and MetricTypes as value
+    const metrics: Map<string, number> = new Map<string, number>()
+    this.metrics.forEach((value, key) => {
+      if (value instanceof MetricCounter) {
+        metrics.set(key, value.getCount())
+        return
+      }
+      if (value instanceof MetricTimestamp) {
+        metrics.set(key, value.getDelta())
+        return
+      }
+    })
+
+    return metrics
   }
 }
