@@ -2,13 +2,23 @@ import { MetricCounter } from './metricCounter'
 import { MetricTimestamp } from './metricTimestamp'
 import { MetricValue } from './metricValue'
 
-type MetricTypes = MetricCounter | MetricTimestamp | MetricValue
+export type MetricTypes = MetricCounter | MetricTimestamp | MetricValue
+export type MetricListItem = { name: string; metric: MetricTypes }
 
 export class MetricsBag {
   private metrics: Map<string, MetricTypes>
 
   constructor() {
     this.metrics = new Map<string, MetricTypes>()
+  }
+
+  // factory
+  public static create(metrics: Array<MetricListItem>): MetricsBag {
+    const mb = new MetricsBag()
+    metrics.forEach((item) => {
+      mb.addMetric(item.name, item.metric)
+    })
+    return mb
   }
 
   addMetric(key: string, value: MetricTypes): void {

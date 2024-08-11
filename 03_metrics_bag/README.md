@@ -8,6 +8,7 @@ TODO:
 - performance
 - get metrics should have a pick method
 - add labels to metrics bag and labels to individual metrics.
+- A max and min value type
 
 ## How to run
 
