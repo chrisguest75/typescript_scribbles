@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { z } from 'zod'
 import { LoadSimpleSchema } from '../src/simpleSchema'
+import { LoadStrictSchema } from '../src/strictSchema'
 
 describe('zod document tests', () => {
   test('invalid config missing fields', () => {
@@ -12,21 +13,15 @@ describe('zod document tests', () => {
 
   test('invalid config extra fields', () => {
     // ARRANGE
-    const configText = fs.readFileSync('./tests/testdata/invalid_config_extra_fields.json')
-    const configJson = JSON.parse(configText.toString())
-
     // ACT
     // ASSERT
-    expect(() => ConfigZod.parse(configJson)).toThrow()
+    expect(() => LoadStrictSchema('./tests/testdata/invalid_config_extra_fields.json')).toThrow()
   })
 
   test('valid config', () => {
     // ARRANGE
-    const configText = fs.readFileSync('./tests/testdata/valid_config.json')
-    const configJson = JSON.parse(configText.toString())
-
     // ACT
-    const config = ConfigZod.parse(configJson)
+    const config = LoadSimpleSchema('./tests/testdata/valid_config.json')
 
     // ASSERT
     expect(config.folderPath).toBe('/myfolder')
