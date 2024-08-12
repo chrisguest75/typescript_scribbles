@@ -78,7 +78,7 @@ The code should break on the breakpoint.
 
 - TypeScript-first schema validation with static type inference [here](https://zod.dev/)
 - validator.js - A library of string validators and sanitizers. [here](https://github.com/validatorjs/validator.js)
-
-- https://www.reddit.com/r/typescript/comments/10f8kah/is_using_zod_as_the_primary_source_of_truth_for/
-- https://transform.tools/json-to-zod
-- https://testdouble.com/insights/type-safety-at-runtime-with-zod
+- Is using zod as the primary source of truth for Typescript types sensible/sustainable? [here](https://www.reddit.com/r/typescript/comments/10f8kah/is_using_zod_as_the_primary_source_of_truth_for/)
+- json-to-zod [here](https://transform.tools/json-to-zod)
+- Get safer TypeScript code with Zod: a practical guide [here](https://testdouble.com/insights/type-safety-at-runtime-with-zod)
+- Schema Versioning with Zod [here](https://www.jcore.io/articles/schema-versioning-with-zod)
