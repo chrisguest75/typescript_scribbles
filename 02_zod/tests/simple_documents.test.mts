@@ -1,18 +1,18 @@
 import fs from 'fs'
 import { z } from 'zod'
-
-const ConfigZod = z.object({
-  segmentSize: z.number().min(1).max(100),
-  folderPath: z.string().min(1).max(256),
-  url: z.string().url(),
-  modified: z.optional(z.number()),
-})
-export type Config = z.infer<typeof ConfigZod>
+import { LoadSimpleSchema } from '../src/simpleSchema'
 
 describe('zod document tests', () => {
-  test('invalid config', () => {
+  test('invalid config missing fields', () => {
     // ARRANGE
-    const configText = fs.readFileSync('./tests/testdata/invalid_config.json')
+    // ACT
+    // ASSERT
+    expect(() => LoadSimpleSchema('./tests/testdata/invalid_config_missing_fields.json')).toThrow()
+  })
+
+  test('invalid config extra fields', () => {
+    // ARRANGE
+    const configText = fs.readFileSync('./tests/testdata/invalid_config_extra_fields.json')
     const configJson = JSON.parse(configText.toString())
 
     // ACT

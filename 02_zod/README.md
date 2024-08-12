@@ -7,6 +7,7 @@ TODO:
 - Runtime and compile time.
 - versioned schemas - https://www.jcore.io/articles/schema-versioning-with-zod
 - validate any object with zod
+- strict checking
 
 ## Demonstrates
 
@@ -39,9 +40,12 @@ just local-test-pipeline
 
 ```sh
 npm run start -- --jsonPath './tests/testdata/valid_config.json'
-npm run start -- --jsonPath './tests/testdata/invalid_config.json'
-
 npm run start -- --jsonPath './tests/testdata/valid_config.json' --schema simple
+
+
+npm run start -- --jsonPath './tests/testdata/invalid_config_missing_fields.json' --schema simple
+npm run start -- --jsonPath './tests/testdata/invalid_config_extra_fields.json' --schema strict
+
 ```
 
 ## Debugging
