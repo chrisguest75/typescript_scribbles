@@ -7,6 +7,7 @@ TODO:
 - performance
 - add labels to metrics bag and labels to individual metrics.
 - I don't like that I have to cast in the client and check types in the getMetrics.
+- https://typedoc.org/guides/plugins/
 
 ## Supports
 
@@ -45,6 +46,12 @@ just local-test-pipeline
 npm run start -- --time 20000
 ```
 
+## Build docs
+
+```sh
+npm run docs:serve
+```
+
 ## Debugging
 
 Ensure that the sourcemap output is enabled.
@@ -78,3 +85,6 @@ The code should break on the breakpoint.
 
 - Chainguard LTS images [here](https://images.chainguard.dev/directory/image/node-lts/versions)
 - Node prune [here](https://github.com/tj/node-prune/tree/master)
+
+- https://typedoc.org/guides/plugins/
+- https://tsdoc.org/

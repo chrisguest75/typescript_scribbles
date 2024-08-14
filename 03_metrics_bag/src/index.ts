@@ -6,13 +6,22 @@ import { MetricCounter } from './metricCounter.js'
 import { MetricTimestamp } from './metricTimestamp.js'
 import { MetricValue, MetricValueTypes } from './metricValue.js'
 
+/**
+ * Sleep function
+ * @param ms period to sleep for
+ * @returns A promise to be awaited
+ */
 async function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-/*
-Entrypoint
-*/
+/**
+ * MetricsBag example code
+ * @param args The parsed command line args
+ * @mermaid Make TypeDoc easy to use with mermaid.js
+ * graph TB
+ *   mermaid.js --> TypeDoc;
+ */
 export async function main(args: minimist.ParsedArgs) {
   const mb = MetricsBag.create([
     { name: 'loopCounter', metric: new MetricCounter(0) },
