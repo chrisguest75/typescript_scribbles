@@ -2,6 +2,7 @@ import { logger } from './logger.js'
 import * as dotenv from 'dotenv'
 import minimist from 'minimist'
 import { LoadSimpleSchema } from './simpleSchema.js'
+import { LoadNestedSchema } from './nestedSchema.js'
 
 /*
 Entrypoint
@@ -18,12 +19,20 @@ export async function main(args: minimist.ParsedArgs) {
 
   const schema = args['schema']
   switch (schema) {
-    case 'simple':
+    case 'simple': {
       const jsonPath = args['jsonPath']
       logger.info({ msg: 'Loading simple schema', jsonPath: jsonPath })
       const config = LoadSimpleSchema(jsonPath)
       logger.info({ msg: 'Simple schema loaded', config: config })
       break
+    }
+    case 'nested': {
+      const jsonPath = args['jsonPath']
+      logger.info({ msg: 'Loading nested schema', jsonPath: jsonPath })
+      const config = LoadNestedSchema(jsonPath)
+      logger.info({ msg: 'Nested schema loaded', config: config })
+      break
+    }
     default:
       logger.error({ msg: 'Invalid schema', schema })
       process.exit(1)

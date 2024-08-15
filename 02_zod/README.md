@@ -46,6 +46,7 @@ npm run start -- --jsonPath './tests/testdata/valid_config.json' --schema simple
 npm run start -- --jsonPath './tests/testdata/invalid_config_missing_fields.json' --schema simple
 npm run start -- --jsonPath './tests/testdata/invalid_config_extra_fields.json' --schema strict
 
+npm run start -- --jsonPath './tests/testdata/nested_schema.json' --schema nested
 ```
 
 ## Debugging
