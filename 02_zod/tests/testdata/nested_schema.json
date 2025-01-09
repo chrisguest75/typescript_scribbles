@@ -1,0 +1,12 @@
+{
+  "words": [
+    {
+      "content": "hello",
+      "language": "en"
+    },
+    {
+      "content": "world",
+      "language": "en"
+    }
+  ]
+}

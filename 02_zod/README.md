@@ -1,17 +1,19 @@
 # README
 
-Demonstrates Zod functionality.
+Demonstrates Zod functionality [zod.dev](https://zod.dev/).
 
 TODO:
 
 - Runtime and compile time.
 - versioned schemas - https://www.jcore.io/articles/schema-versioning-with-zod
 - validate any object with zod
+- Build out complex objects with zod
 
 ## Demonstrates
 
 - Loading JSON files off disk and validating them against a Zod schema
 - Different Zod types
+- Strict checking
 
 ## How to run
 
@@ -39,9 +41,13 @@ just local-test-pipeline
 
 ```sh
 npm run start -- --jsonPath './tests/testdata/valid_config.json'
-npm run start -- --jsonPath './tests/testdata/invalid_config.json'
-
 npm run start -- --jsonPath './tests/testdata/valid_config.json' --schema simple
+
+
+npm run start -- --jsonPath './tests/testdata/invalid_config_missing_fields.json' --schema simple
+npm run start -- --jsonPath './tests/testdata/invalid_config_extra_fields.json' --schema strict
+
+npm run start -- --jsonPath './tests/testdata/nested_schema.json' --schema nested
 ```
 
 ## Debugging
@@ -74,7 +80,7 @@ The code should break on the breakpoint.
 
 - TypeScript-first schema validation with static type inference [here](https://zod.dev/)
 - validator.js - A library of string validators and sanitizers. [here](https://github.com/validatorjs/validator.js)
-
-- https://www.reddit.com/r/typescript/comments/10f8kah/is_using_zod_as_the_primary_source_of_truth_for/
-- https://transform.tools/json-to-zod
-- https://testdouble.com/insights/type-safety-at-runtime-with-zod
+- Is using zod as the primary source of truth for Typescript types sensible/sustainable? [here](https://www.reddit.com/r/typescript/comments/10f8kah/is_using_zod_as_the_primary_source_of_truth_for/)
+- json-to-zod [here](https://transform.tools/json-to-zod)
+- Get safer TypeScript code with Zod: a practical guide [here](https://testdouble.com/insights/type-safety-at-runtime-with-zod)
+- Schema Versioning with Zod [here](https://www.jcore.io/articles/schema-versioning-with-zod)
