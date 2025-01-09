@@ -1,18 +1,19 @@
 # README
 
-Demonstrates Zod functionality.
+Demonstrates Zod functionality [zod.dev](https://zod.dev/).
 
 TODO:
 
 - Runtime and compile time.
 - versioned schemas - https://www.jcore.io/articles/schema-versioning-with-zod
 - validate any object with zod
-- strict checking
+- Build out complex objects with zod
 
 ## Demonstrates
 
 - Loading JSON files off disk and validating them against a Zod schema
 - Different Zod types
+- Strict checking
 
 ## How to run
 
