@@ -77,16 +77,13 @@ export function validate(strings: Array<string>, locale: validator.AlphaLocale):
   for (let index = 0; index < strings.length; index++) {
     const element = strings[index].trim()
 
-    if (element.length <= 0) {
-      continue
-    }
-
-    if (element.length <= 1) {
+    if (element.length <= 1 || element.length > 40) {
       continue
     }
 
     const withoutPunctuation = removePunctuation(element)
 
+    // after removing punctuation check alpha within locale.
     if (validator.isAlphanumeric(withoutPunctuation, locale)) {
       if (validatePunctuation(element, 2)) {
         returnArray.push(element)

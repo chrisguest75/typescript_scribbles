@@ -38,6 +38,15 @@ describe('validate', () => {
     expect(validated).toStrictEqual(['second', 'third', 'fifth'])
   })
 
+  it('will filter words over 40 characters in length', () => {
+    // ARRANGE
+    const strings: Array<string> = ['onetwofouronetwofouronetwofouronetwofourone', 'third', 'z', 'fifth']
+    // ACT
+    const validated = validate(strings, 'en-US')
+    // ASSERT
+    expect(validated).toStrictEqual(['third', 'fifth'])
+  })
+
   it('will filter words containing control characters', () => {
     // ARRANGE
     const strings: Array<string> = ['Hello\r\nWorld', '\d \t \n \r \f \b \v', 'Hello\nWorld', 'Hello\tWorld']

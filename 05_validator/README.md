@@ -7,6 +7,10 @@ NOTES:
 * Trim words
 * Do not allow words with more than two punctuation marks
 
+TODO:
+
+* Detect locale of a word then validate against it.
+
 ## Run tests
 
 ```sh
