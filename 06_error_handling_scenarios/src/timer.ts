@@ -21,7 +21,7 @@ export function createTimer(callback: (arg0: Invocation[], arg1: number) => void
     timeout)
 }
 
-export function createTimerAsync(callback: (arg0: Invocation[], arg1: number) => void, invocationStack: Array<Invocation>, timeout: number, innvocation: number, maxInvocations: number = 10) {
+export async function createTimerAsync(callback: (arg0: Invocation[], arg1: number) => void, invocationStack: Array<Invocation>, timeout: number, innvocation: number, maxInvocations: number = 10) {
   setTimeout(async () => {
     // bail out if we reached the maximum number of innvocations
     if (innvocation >= maxInvocations) {
