@@ -1,25 +1,51 @@
 import { describe, test, expect } from '@jest/globals'
-import { createTimer, createTimerAsync } from './timer'
+import { Invocation, createTimer, createTimerAsync } from './timer'
 import { promisify } from 'util'
+import exp from 'constants'
+
 
 const sleep = promisify(setTimeout)
 
-const callbackNormal = (innvocationStack: Array<string>, innvocation: number) => {
-  innvocationStack.push(`callbackNormal ${innvocation}`)
+const callbackNormal = (invocationStack: Array<Invocation>, invocation: number) => {
+  const item = {
+    time: Date.now(),
+    name: 'callbackNormal',
+    id: invocation
+  }
+
+  invocationStack.push(item)
 }
 
-const callbackNormalAsync = async (innvocationStack: Array<string>, innvocation: number) => {
-  innvocationStack.push(`callbackNormalAsync ${innvocation}`)
+const callbackNormalAsync = async (invocationStack: Array<Invocation>, invocation: number) => {
+  const item = {
+    time: Date.now(),
+    name: 'callbackNormalAsync',
+    id: invocation
+  }
+
+  invocationStack.push(item)
 }
 
-const callbackException = (innvocationStack: Array<string>, innvocation: number) => {
-  innvocationStack.push(`callbackException ${innvocation}`)
+const callbackException = (invocationStack: Array<Invocation>, invocation: number) => {
+  const item = {
+    time: Date.now(),
+    name: 'callbackException',
+    id: invocation
+  }
+
+  invocationStack.push(item)
   throw new Error('callbackException')
 }
 
-const callbackExceptionAsync = async (innvocationStack: Array<string>, innvocation: number) => {
-  innvocationStack.push(`callbackExceptionAsync ${innvocation}`)
-  throw new Error('callbackException')
+const callbackExceptionAsync = async (invocationStack: Array<Invocation>, invocation: number) => {
+  const item = {
+    time: Date.now(),
+    name: 'callbackExceptionAsync',
+    id: invocation
+  }
+
+  invocationStack.push(item)
+  throw new Error('callbackExceptionAsync')
 }
 
 // Can't sleep in a synchronous function
@@ -28,26 +54,33 @@ const callbackExceptionAsync = async (innvocationStack: Array<string>, innvocati
   sleep(1000)
 }*/
 
-const callbackSleepAsync = async (innvocationStack: Array<string>, innvocation: number) => {
-  innvocationStack.push(`callbackNormalAsync ${innvocation}`)
+const callbackSleepAsync = async (invocationStack: Array<Invocation>, invocation: number) => {
+  const item = {
+    time: Date.now(),
+    name: 'callbackSleepAsync',
+    id: invocation
+  }
+
+  invocationStack.push(item)
   await sleep(1000)
 }
 
 
-describe.skip('timer sync', () => {
-  test('calls timer function', async () => {
+describe('timer sync', () => {
+  test('createTimer->callbackNormal calls timer function expected times over 1 second', async () => {
     // ARRANGE
-    const innvocations: Array<string> = []
+    const innvocations: Array<Invocation> = []
     createTimer(callbackNormal, innvocations, 100, 0, 10)
     // ACT
     await sleep(1000)
     // ASSERT
     expect(innvocations.length).toBeGreaterThanOrEqual(8)
+    expect(innvocations[0].name).toBe('callbackNormal')
   })
 
-  test('calls async timer function', async () => {
+  test('createTimer->callbackNormalAsync calls async timer function expected times over 1 second', async () => {
     // ARRANGE
-    const innvocations: Array<string> = []
+    const innvocations: Array<Invocation> = []
     createTimer(callbackNormalAsync, innvocations, 100, 0, 10)
     // ACT
     await sleep(1000)
@@ -55,19 +88,19 @@ describe.skip('timer sync', () => {
     expect(innvocations.length).toBeGreaterThanOrEqual(8)
   })
 
-  test('timer function stops after immediate exception', async () => {
+  test('createTimer->callbackException timer function stops after immediate exception', async () => {
     // ARRANGE
-    const innvocations: Array<string> = []
+    const innvocations: Array<Invocation> = []
     createTimer(callbackException, innvocations, 100, 0, 10)
     // ACT
     await sleep(1000)
     // ASSERT
-    expect(innvocations.length).toBeGreaterThanOrEqual(1)
+    expect(innvocations.length).toBeLessThanOrEqual(1)
   })
 
-  test('async timer function stops after immediate exception', async () => {
+  test('createTimer->callbackExceptionAsync timer function stops after immediate exception', async () => {
     // ARRANGE
-    const innvocations: Array<string> = []
+    const innvocations: Array<Invocation> = []
     createTimer(callbackExceptionAsync, innvocations, 100, 0, 10)
     // ACT
     await sleep(1000)
@@ -75,9 +108,9 @@ describe.skip('timer sync', () => {
     expect(innvocations.length).toBeGreaterThanOrEqual(8)
   })
 
-  test('calls async timer function once', async () => {
+  test('createTimer->callbackSleepAsync calls async timer function once', async () => {
     // ARRANGE
-    const innvocations: Array<string> = []
+    const innvocations: Array<Invocation> = []
     createTimer(callbackSleepAsync, innvocations, 100, 0, 10)
     // ACT
     await sleep(1000)
@@ -87,9 +120,9 @@ describe.skip('timer sync', () => {
 })
 
 describe('timer async', () => {
-  test('calls timer function', async () => {
+  test('createTimerAsync->callbackNormal calls timer function expected times over 1 second', async () => {
     // ARRANGE
-    const innvocations: Array<string> = []
+    const innvocations: Array<Invocation> = []
     createTimerAsync(callbackNormal, innvocations, 100, 0, 10)
     // ACT
     await sleep(1000)
@@ -97,9 +130,9 @@ describe('timer async', () => {
     expect(innvocations.length).toBeGreaterThanOrEqual(8)
   })
 
-  test('calls async timer function', async () => {
+  test('createTimerAsync->callbackNormalAsync calls async timer function expected times over 1 second', async () => {
     // ARRANGE
-    const innvocations: Array<string> = []
+    const innvocations: Array<Invocation> = []
     createTimerAsync(callbackNormalAsync, innvocations, 100, 0, 10)
     // ACT
     await sleep(1000)
@@ -107,9 +140,9 @@ describe('timer async', () => {
     expect(innvocations.length).toBeGreaterThanOrEqual(8)
   })
 
-  test('timer function stops after immediate exception', async () => {
+  test('createTimerAsync->callbackException timer function stops after immediate exception', async () => {
     // ARRANGE
-    const innvocations: Array<string> = []
+    const innvocations: Array<Invocation> = []
     createTimerAsync(callbackException, innvocations, 100, 0, 10)
     // ACT
     await sleep(1000)
@@ -117,9 +150,9 @@ describe('timer async', () => {
     expect(innvocations.length).toBeGreaterThanOrEqual(1)
   })
 
-  test('async timer function stops after immediate exception', async () => {
+  test('createTimerAsync->callbackExceptionAsync timer function stops after immediate exception', async () => {
     // ARRANGE
-    const innvocations: Array<string> = []
+    const innvocations: Array<Invocation> = []
     createTimerAsync(callbackExceptionAsync, innvocations, 100, 0, 10)
     // ACT
     await sleep(1000)
@@ -127,9 +160,9 @@ describe('timer async', () => {
     expect(innvocations.length).toBeGreaterThanOrEqual(1)
   })
 
-  test('calls async timer function once', async () => {
+  test('createTimerAsync->callbackSleepAsync calls async timer function once', async () => {
     // ARRANGE
-    const innvocations: Array<string> = []
+    const innvocations: Array<Invocation> = []
     createTimerAsync(callbackSleepAsync, innvocations, 100, 0, 10)
     // ACT
     await sleep(1000)

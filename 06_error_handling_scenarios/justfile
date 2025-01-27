@@ -22,10 +22,10 @@ clean:
   npm run clean
 
 build: clean
-  npm run build
+  npm run build 
 
 test: 
-  npm run test
+  npm run test -- --verbose
 
 create_npmrc:
   #!/usr/bin/env bash

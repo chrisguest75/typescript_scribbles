@@ -1,31 +1,37 @@
 // src/timer.ts
 
-export function createTimer(callback: (arg0: string[], arg1: number) => void, innvocationStack: Array<string>, timeout: number, innvocation: number, maxInnvocations: number = 10) {
+export type Invocation = {
+  time: number
+  name: string
+  id: number
+}
+
+export function createTimer(callback: (arg0: Invocation[], arg1: number) => void, invocationStack: Array<Invocation>, timeout: number, invocation: number, maxInvocations: number = 10) {
   setTimeout(() => {
     // bail out if we reached the maximum number of innvocations
-    if (innvocation >= maxInnvocations) {
+    if (invocation >= maxInvocations) {
       return
     }
 
-    callback(innvocationStack, innvocation)
+    callback(invocationStack, invocation)
 
     // restart the timer
-    createTimer(callback, innvocationStack, timeout, innvocation + 1, maxInnvocations)
+    createTimer(callback, invocationStack, timeout, invocation + 1, maxInvocations)
   },
     timeout)
 }
 
-export function createTimerAsync(callback: (arg0: string[], arg1: number) => void, innvocationStack: Array<string>, timeout: number, innvocation: number, maxInnvocations: number = 10) {
+export function createTimerAsync(callback: (arg0: Invocation[], arg1: number) => void, invocationStack: Array<Invocation>, timeout: number, innvocation: number, maxInvocations: number = 10) {
   setTimeout(async () => {
     // bail out if we reached the maximum number of innvocations
-    if (innvocation >= maxInnvocations) {
+    if (innvocation >= maxInvocations) {
       return
     }
 
-    await callback(innvocationStack, innvocation)
+    await callback(invocationStack, innvocation)
 
     // restart the timer
-    createTimer(callback, innvocationStack, timeout, innvocation + 1, maxInnvocations)
+    createTimer(callback, invocationStack, timeout, innvocation + 1, maxInvocations)
   },
     timeout)
 }
