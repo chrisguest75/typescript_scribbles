@@ -4,3 +4,4 @@ docs
 out
 .publish_npmrc
 .env
+output

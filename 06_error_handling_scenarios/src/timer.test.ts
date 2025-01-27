@@ -1,8 +1,7 @@
-import { describe, test, expect } from '@jest/globals'
+import { describe, test, expect, beforeEach, afterEach } from '@jest/globals'
 import { Invocation, createTimer, createTimerAsync } from './timer'
 import { promisify } from 'util'
-import exp from 'constants'
-
+import fs from 'fs/promises'
 
 const sleep = promisify(setTimeout)
 
@@ -65,108 +64,132 @@ const callbackSleepAsync = async (invocationStack: Array<Invocation>, invocation
   await sleep(1000)
 }
 
+let invocations: Array<Invocation> = []
+
+beforeEach(() => {
+  // Initialize the invocations array and generate a unique filename
+  invocations = [];
+
+});
+
+afterEach(async () => {
+  // Write the invocations array to a file after each test
+  const outputDir = './output';
+  fs.mkdir(outputDir).catch(() => { });
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const filename = `${outputDir}/invocations-${timestamp}.txt`
+  const testName = expect.getState().currentTestName;
+  const output = {
+    testName,
+    invocations
+  }
+
+  const jsonLog = JSON.stringify(output, null, 2)
+  await fs.writeFile(filename, jsonLog, 'utf-8');
+});
+
 
 describe('timer sync', () => {
   test('createTimer->callbackNormal calls timer function expected times over 1 second', async () => {
     // ARRANGE
-    const innvocations: Array<Invocation> = []
-    createTimer(callbackNormal, innvocations, 100, 0, 10)
+    //const invocations: Array<Invocation> = []
+    createTimer(callbackNormal, invocations, 100, 0, 10)
     // ACT
     await sleep(1000)
     // ASSERT
-    expect(innvocations.length).toBeGreaterThanOrEqual(8)
-    expect(innvocations[0].name).toBe('callbackNormal')
+    expect(invocations.length).toBeGreaterThanOrEqual(8)
+    expect(invocations[0].name).toBe('callbackNormal')
   })
 
   test('createTimer->callbackNormalAsync calls async timer function expected times over 1 second', async () => {
     // ARRANGE
-    const innvocations: Array<Invocation> = []
-    createTimer(callbackNormalAsync, innvocations, 100, 0, 10)
+    //const invocations: Array<Invocation> = []
+    createTimer(callbackNormalAsync, invocations, 100, 0, 10)
     // ACT
     await sleep(1000)
     // ASSERT
-    expect(innvocations.length).toBeGreaterThanOrEqual(8)
+    expect(invocations.length).toBeGreaterThanOrEqual(8)
   })
 
   test('createTimer->callbackException timer function stops after immediate exception', async () => {
     // ARRANGE
-    const innvocations: Array<Invocation> = []
-    createTimer(callbackException, innvocations, 100, 0, 10)
+    //const invocations: Array<Invocation> = []
+    createTimer(callbackException, invocations, 100, 0, 10)
     // ACT
     await sleep(1000)
     // ASSERT
-    expect(innvocations.length).toBeLessThanOrEqual(1)
+    expect(invocations.length).toBeLessThanOrEqual(1)
   })
 
   test('createTimer->callbackExceptionAsync timer function stops after immediate exception', async () => {
     // ARRANGE
-    const innvocations: Array<Invocation> = []
-    createTimer(callbackExceptionAsync, innvocations, 100, 0, 10)
+    //const invocations: Array<Invocation> = []
+    createTimer(callbackExceptionAsync, invocations, 100, 0, 10)
     // ACT
     await sleep(1000)
     // ASSERT
-    expect(innvocations.length).toBeGreaterThanOrEqual(8)
+    expect(invocations.length).toBeGreaterThanOrEqual(8)
   })
 
   test('createTimer->callbackSleepAsync calls async timer function once', async () => {
     // ARRANGE
-    const innvocations: Array<Invocation> = []
-    createTimer(callbackSleepAsync, innvocations, 100, 0, 10)
+    //const invocations: Array<Invocation> = []
+    createTimer(callbackSleepAsync, invocations, 100, 0, 10)
     // ACT
     await sleep(1000)
     // ASSERT
-    expect(innvocations.length).toBeLessThan(2)
+    expect(invocations.length).toBeLessThan(2)
   })
 })
 
 describe('timer async', () => {
   test('createTimerAsync->callbackNormal calls timer function expected times over 1 second', async () => {
     // ARRANGE
-    const innvocations: Array<Invocation> = []
-    createTimerAsync(callbackNormal, innvocations, 100, 0, 10)
+    //const invocations: Array<Invocation> = []
+    createTimerAsync(callbackNormal, invocations, 100, 0, 10)
     // ACT
     await sleep(1000)
     // ASSERT
-    expect(innvocations.length).toBeGreaterThanOrEqual(8)
+    expect(invocations.length).toBeGreaterThanOrEqual(8)
   })
 
   test('createTimerAsync->callbackNormalAsync calls async timer function expected times over 1 second', async () => {
     // ARRANGE
-    const innvocations: Array<Invocation> = []
-    createTimerAsync(callbackNormalAsync, innvocations, 100, 0, 10)
+    //const invocations: Array<Invocation> = []
+    createTimerAsync(callbackNormalAsync, invocations, 100, 0, 10)
     // ACT
     await sleep(1000)
     // ASSERT
-    expect(innvocations.length).toBeGreaterThanOrEqual(8)
+    expect(invocations.length).toBeGreaterThanOrEqual(8)
   })
 
   test('createTimerAsync->callbackException timer function stops after immediate exception', async () => {
     // ARRANGE
-    const innvocations: Array<Invocation> = []
-    createTimerAsync(callbackException, innvocations, 100, 0, 10)
+    //const invocations: Array<Invocation> = []
+    createTimerAsync(callbackException, invocations, 100, 0, 10)
     // ACT
     await sleep(1000)
     // ASSERT
-    expect(innvocations.length).toBeGreaterThanOrEqual(1)
+    expect(invocations.length).toBeGreaterThanOrEqual(1)
   })
 
   test('createTimerAsync->callbackExceptionAsync timer function stops after immediate exception', async () => {
     // ARRANGE
-    const innvocations: Array<Invocation> = []
-    createTimerAsync(callbackExceptionAsync, innvocations, 100, 0, 10)
+    //const invocations: Array<Invocation> = []
+    createTimerAsync(callbackExceptionAsync, invocations, 100, 0, 10)
     // ACT
     await sleep(1000)
     // ASSERT
-    expect(innvocations.length).toBeGreaterThanOrEqual(1)
+    expect(invocations.length).toBeGreaterThanOrEqual(1)
   })
 
   test('createTimerAsync->callbackSleepAsync calls async timer function once', async () => {
     // ARRANGE
-    const innvocations: Array<Invocation> = []
-    createTimerAsync(callbackSleepAsync, innvocations, 100, 0, 10)
+    //const invocations: Array<Invocation> = []
+    createTimerAsync(callbackSleepAsync, invocations, 100, 0, 10)
     // ACT
     await sleep(1000)
     // ASSERT
-    expect(innvocations.length).toBeLessThan(2)
+    expect(invocations.length).toBeLessThan(2)
   })
 })
