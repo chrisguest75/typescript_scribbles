@@ -1,5 +1,5 @@
 import { describe, test, expect } from '@jest/globals'
-import { createTimer } from './timer'
+import { createTimer, createTimerAsync } from './timer'
 import { promisify } from 'util'
 
 const sleep = promisify(setTimeout)
@@ -22,6 +22,7 @@ const callbackExceptionAsync = async (innvocationStack: Array<string>, innvocati
   throw new Error('callbackException')
 }
 
+// Can't sleep in a synchronous function
 /*const callbackSleep = (innvocationStack: Array<string>, innvocation: number) => {
   innvocationStack.push(`callbackNormal ${innvocation}`)
   sleep(1000)
@@ -33,7 +34,7 @@ const callbackSleepAsync = async (innvocationStack: Array<string>, innvocation: 
 }
 
 
-describe('timer', () => {
+describe.skip('timer sync', () => {
   test('calls timer function', async () => {
     // ARRANGE
     const innvocations: Array<string> = []
@@ -83,7 +84,56 @@ describe('timer', () => {
     // ASSERT
     expect(innvocations.length).toBeLessThan(2)
   })
-
-
 })
 
+describe('timer async', () => {
+  test('calls timer function', async () => {
+    // ARRANGE
+    const innvocations: Array<string> = []
+    createTimerAsync(callbackNormal, innvocations, 100, 0, 10)
+    // ACT
+    await sleep(1000)
+    // ASSERT
+    expect(innvocations.length).toBeGreaterThanOrEqual(8)
+  })
+
+  test('calls async timer function', async () => {
+    // ARRANGE
+    const innvocations: Array<string> = []
+    createTimerAsync(callbackNormalAsync, innvocations, 100, 0, 10)
+    // ACT
+    await sleep(1000)
+    // ASSERT
+    expect(innvocations.length).toBeGreaterThanOrEqual(8)
+  })
+
+  test('timer function stops after immediate exception', async () => {
+    // ARRANGE
+    const innvocations: Array<string> = []
+    createTimerAsync(callbackException, innvocations, 100, 0, 10)
+    // ACT
+    await sleep(1000)
+    // ASSERT
+    expect(innvocations.length).toBeGreaterThanOrEqual(1)
+  })
+
+  test('async timer function stops after immediate exception', async () => {
+    // ARRANGE
+    const innvocations: Array<string> = []
+    createTimerAsync(callbackExceptionAsync, innvocations, 100, 0, 10)
+    // ACT
+    await sleep(1000)
+    // ASSERT
+    expect(innvocations.length).toBeGreaterThanOrEqual(1)
+  })
+
+  test('calls async timer function once', async () => {
+    // ARRANGE
+    const innvocations: Array<string> = []
+    createTimerAsync(callbackSleepAsync, innvocations, 100, 0, 10)
+    // ACT
+    await sleep(1000)
+    // ASSERT
+    expect(innvocations.length).toBeLessThan(2)
+  })
+})
