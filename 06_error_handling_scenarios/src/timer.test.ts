@@ -5,46 +5,40 @@ import fs from 'fs/promises'
 
 const sleep = promisify(setTimeout)
 
-const callbackNormal = (invocationStack: Array<Invocation>, invocation: number) => {
-  const item = {
-    time: Date.now(),
-    name: 'callbackNormal',
-    id: invocation
+function itemLogFactory(name: string, id: number): Invocation {
+  return {
+    startTime: Date.now(),
+    name,
+    id,
+    completionTime: 0,
   }
-
+}
+const callbackNormal = (invocationStack: Array<Invocation>, invocation: number) => {
+  const item = itemLogFactory('callbackNormal', invocation)
+  item.completionTime = Date.now()
   invocationStack.push(item)
 }
 
 const callbackNormalAsync = async (invocationStack: Array<Invocation>, invocation: number) => {
-  const item = {
-    time: Date.now(),
-    name: 'callbackNormalAsync',
-    id: invocation
-  }
-
+  const item = itemLogFactory('callbackNormalAsync', invocation)
+  item.completionTime = Date.now()
   invocationStack.push(item)
 }
 
 const callbackException = (invocationStack: Array<Invocation>, invocation: number) => {
-  const item = {
-    time: Date.now(),
-    name: 'callbackException',
-    id: invocation
-  }
-
+  const item = itemLogFactory('callbackException', invocation)
   invocationStack.push(item)
   throw new Error('callbackException')
+  // will not be inovoked
+  item.completionTime = Date.now()
 }
 
 const callbackExceptionAsync = async (invocationStack: Array<Invocation>, invocation: number) => {
-  const item = {
-    time: Date.now(),
-    name: 'callbackExceptionAsync',
-    id: invocation
-  }
-
+  const item = itemLogFactory('callbackExceptionAsync', invocation)
   invocationStack.push(item)
   throw new Error('callbackExceptionAsync')
+  // will not be inovoked
+  item.completionTime = Date.now()
 }
 
 // Can't sleep in a synchronous function
@@ -54,40 +48,35 @@ const callbackExceptionAsync = async (invocationStack: Array<Invocation>, invoca
 }*/
 
 const callbackSleepAsync = async (invocationStack: Array<Invocation>, invocation: number) => {
-  const item = {
-    time: Date.now(),
-    name: 'callbackSleepAsync',
-    id: invocation
-  }
-
-  invocationStack.push(item)
+  const item = itemLogFactory('callbackSleepAsync', invocation)
   await sleep(1000)
+  item.completionTime = Date.now()
+  invocationStack.push(item)
 }
 
 let invocations: Array<Invocation> = []
+const testRunFolder = new Date().toISOString().replace(/[:.]/g, '-')
 
 beforeEach(() => {
   // Initialize the invocations array and generate a unique filename
-  invocations = [];
-
-});
+  invocations = []
+})
 
 afterEach(async () => {
   // Write the invocations array to a file after each test
-  const outputDir = './output';
-  fs.mkdir(outputDir).catch(() => { });
-  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const outputDir = `./output/${testRunFolder}`
+  fs.mkdir(outputDir, { recursive: true }).catch(() => {})
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
   const filename = `${outputDir}/invocations-${timestamp}.txt`
-  const testName = expect.getState().currentTestName;
+  const testName = expect.getState().currentTestName
   const output = {
     testName,
-    invocations
+    invocations,
   }
 
   const jsonLog = JSON.stringify(output, null, 2)
-  await fs.writeFile(filename, jsonLog, 'utf-8');
-});
-
+  await fs.writeFile(filename, jsonLog, 'utf-8')
+})
 
 describe('timer sync', () => {
   test('createTimer->callbackNormal calls timer function expected times over 1 second', async () => {
@@ -136,9 +125,9 @@ describe('timer sync', () => {
     //const invocations: Array<Invocation> = []
     createTimer(callbackSleepAsync, invocations, 100, 0, 10)
     // ACT
-    await sleep(1000)
+    await sleep(3500)
     // ASSERT
-    expect(invocations.length).toBeLessThan(2)
+    expect(invocations.length).toBeLessThan(4)
   })
 })
 
@@ -188,8 +177,8 @@ describe('timer async', () => {
     //const invocations: Array<Invocation> = []
     createTimerAsync(callbackSleepAsync, invocations, 100, 0, 10)
     // ACT
-    await sleep(1000)
+    await sleep(3500)
     // ASSERT
-    expect(invocations.length).toBeLessThan(2)
+    expect(invocations.length).toBeLessThan(4)
   })
 })
