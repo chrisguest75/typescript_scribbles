@@ -92,3 +92,7 @@ export function validate(strings: Array<string>, locale: validator.AlphaLocale):
   }
   return returnArray
 }
+
+export function normalise(strings: Array<string>): Array<string> {
+  return strings.map((string) => string.normalize('NFKC'))
+}
