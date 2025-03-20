@@ -1,5 +1,6 @@
 import validator from 'validator'
-import { validate } from './validate'
+import { validate, normalise } from './validate'
+import { expect, it, describe } from '@jest/globals'
 
 describe('validate', () => {
   it('will not error with an empty list of strings', () => {
@@ -55,15 +56,6 @@ describe('validate', () => {
     // ASSERT
     expect(validated).toStrictEqual([])
   })
-
-  it('Unicode Normalization Tests', () => {
-    test('should normalize a non-normalized Unicode string', () => {
-      const input = '\u0041\u0301'; // 'Á' (A + combining acute accent)
-      const expected = '\u00C1'; // 'Á' (precomposed character)
-      const result = normalizeWord(input);
-      expect(result).toBe(expected);
-    });
-  });
 
   it('will not filter words from different locales', () => {
     // ARRANGE
@@ -129,4 +121,15 @@ describe('validate', () => {
       expect(validated).toStrictEqual(value)
     })
   })
+
+})
+
+describe('normalise', () => {
+  it('Should normalize a non-normalized Unicode string', () => {
+    const input = ['Amélie'];
+    const expected = ['Amélie'];
+    const result = normalise(input);
+    expect(result).toStrictEqual(expected);
+  });
+
 })
