@@ -56,6 +56,15 @@ describe('validate', () => {
     expect(validated).toStrictEqual([])
   })
 
+  it('Unicode Normalization Tests', () => {
+    test('should normalize a non-normalized Unicode string', () => {
+      const input = '\u0041\u0301'; // 'Á' (A + combining acute accent)
+      const expected = '\u00C1'; // 'Á' (precomposed character)
+      const result = normalizeWord(input);
+      expect(result).toBe(expected);
+    });
+  });
+
   it('will not filter words from different locales', () => {
     // ARRANGE
     const strings: Map<validator.AlphaLocale, Array<string>> = new Map<validator.AlphaLocale, Array<string>>([

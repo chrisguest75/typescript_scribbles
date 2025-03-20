@@ -25,3 +25,4 @@ just test  -- --watch src/validate.test.ts
 ## Resources
 
 - A library of string validators and sanitizers [here](https://www.npmjs.com/package/validator)
+- Unicode Normalization Forms [here](https://unicode.org/reports/tr15/)
