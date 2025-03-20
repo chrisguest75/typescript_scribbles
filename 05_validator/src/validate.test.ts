@@ -125,11 +125,36 @@ describe('validate', () => {
 })
 
 describe('normalise', () => {
-  it('Should normalize a non-normalized Unicode string', () => {
+  it('should decompose Amélie to Amélie', () => {
+    // ARRANGE
     const input = ['Amélie'];
     const expected = ['Amélie'];
+    // ACT
     const result = normalise(input);
+    // ASSERT
+    const bufInput = Buffer.from(input[0], 'utf8').toString('hex');
+    const bufExpected = Buffer.from(expected[0], 'utf8').toString('hex');
+    const bufResult = Buffer.from(result[0], 'utf8').toString('hex');
+
+    console.log(`input: ${bufInput}, expected: ${bufExpected}, result: ${bufResult}`);
     expect(result).toStrictEqual(expected);
   });
+
+  it('should decompose \u01F2 to \u0044\u007A', () => {
+    // ARRANGE
+    // Using https://www.unicode.org/Public/13.0.0/ucd/UnicodeData.txt
+    const input = ['\u01F2'];
+    const expected = ['\u0044\u007A'];
+    // ACT
+    const result = normalise(input);
+    // ASSERT
+    const bufInput = Buffer.from(input[0], 'utf8').toString('hex');
+    const bufExpected = Buffer.from(expected[0], 'utf8').toString('hex');
+    const bufResult = Buffer.from(result[0], 'utf8').toString('hex');
+
+    console.log(`input: ${bufInput}, expected: ${bufExpected}, result: ${bufResult}`);
+    expect(result).toStrictEqual(expected);
+  });
+
 
 })

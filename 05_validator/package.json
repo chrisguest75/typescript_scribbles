@@ -67,6 +67,7 @@
   "ignore": [],
   "exec": "ts-node ./src/index.ts",
   "dependencies": {
+    "jest-extended": "^4.0.2",
     "validator": "^13.12.0"
   }
 }
