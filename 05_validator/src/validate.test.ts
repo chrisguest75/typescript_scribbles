@@ -124,6 +124,21 @@ describe('validate', () => {
 
 })
 
+function hex(input: string): string {
+  const hexStr = Buffer.from(input, 'utf8').toString('hex')
+  // split hex string into pairs of two
+  const hexPairs = hexStr.match(/.{1,2}/g)
+  if (hexPairs) {
+    // prepend '0x' to each pair
+    hexPairs.forEach((pair, index) => {
+      hexPairs[index] = '0x' + pair
+    })
+    // join pairs with a space
+    return input + ' - ' + hexPairs.join(' ')
+  }
+  return input + ' - ';
+}
+
 describe('normalise', () => {
   it('should decompose Amélie to Amélie', () => {
     // ARRANGE
@@ -132,29 +147,43 @@ describe('normalise', () => {
     // ACT
     const result = normalise(input);
     // ASSERT
-    const bufInput = Buffer.from(input[0], 'utf8').toString('hex');
-    const bufExpected = Buffer.from(expected[0], 'utf8').toString('hex');
-    const bufResult = Buffer.from(result[0], 'utf8').toString('hex');
-
-    console.log(`input: ${bufInput}, expected: ${bufExpected}, result: ${bufResult}`);
+    console.log({
+      input: hex(input[0]),
+      expect: hex(expected[0]),
+      result: hex(result[0])
+    })
     expect(result).toStrictEqual(expected);
   });
 
-  it('should decompose \u01F2 to \u0044\u007A', () => {
+  it('\u01F2 should remain \u01F2', () => {
     // ARRANGE
     // Using https://www.unicode.org/Public/13.0.0/ucd/UnicodeData.txt
     const input = ['\u01F2'];
-    const expected = ['\u0044\u007A'];
+    const expected = ['\u01F2'];
     // ACT
     const result = normalise(input);
     // ASSERT
-    const bufInput = Buffer.from(input[0], 'utf8').toString('hex');
-    const bufExpected = Buffer.from(expected[0], 'utf8').toString('hex');
-    const bufResult = Buffer.from(result[0], 'utf8').toString('hex');
-
-    console.log(`input: ${bufInput}, expected: ${bufExpected}, result: ${bufResult}`);
+    console.log({
+      input: hex(input[0]),
+      expect: hex(expected[0]),
+      result: hex(result[0])
+    })
     expect(result).toStrictEqual(expected);
   });
 
-
+  it('Ngāti Rangiwewehi should be canonicalised to Ngāti Rangiwewehi', () => {
+    // ARRANGE
+    // Using https://www.unicode.org/Public/13.0.0/ucd/UnicodeData.txt
+    const input = ['Ngāti Rangiwewehi'];
+    const expected = ['Ngāti Rangiwewehi'];
+    // ACT
+    const result = normalise(input);
+    // ASSERT
+    console.log({
+      input: hex(input[0]),
+      expect: hex(expected[0]),
+      result: hex(result[0])
+    })
+    expect(result).toStrictEqual(expected);
+  });
 })
